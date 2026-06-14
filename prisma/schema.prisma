@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Country {
+  id        Int      @id @default(autoincrement())
+  name      String
+  isoCode   String   @unique
+
+  states    State[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+
+  // Fast country searches
+  @@index([name])
+}
+
+model State {
+  id        Int      @id @default(autoincrement())
+  name      String
+  isoCode   String
+
+  countryId Int
+  country   Country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+
+  cities    City[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+
+  // Required for safe upserts
+  @@unique([isoCode, countryId])
+
+  // Performance indexes
+  @@index([countryId])
+  @@index([name])
+}
+
+model City {
+  id         Int      @id @default(autoincrement())
+  name       String
+  slug       String    // Removed individual @unique constraint here
+
+  population Int?
+
+  stateId    Int
+  state      State    @relation(fields: [stateId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+
+  // FIX: This guarantees a slug only has to be unique within its specific state!
+  @@unique([slug, stateId])
+  @@index([slug])
+  // Performance indexes
+  @@index([stateId])
+  @@index([name])
+}
+
+model Service {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  slug      String   @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+}

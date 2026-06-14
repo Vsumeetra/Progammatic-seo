@@ -1,0 +1,31 @@
+Use JavaScript only.
+Never use TypeScript.
+
+Use Next.js App Router only.
+
+Always prefer server components.
+
+All routes must be dynamic and database-driven.
+
+Use Prisma ORM for all database queries.
+
+Never hardcode cities, states, or services.
+
+Use reusable components only.
+
+Use Tailwind CSS for styling.
+
+All metadata must use generateMetadata.
+
+All SEO pages must include:
+- Spintext
+- Nearby city internal links
+- Dynamic metadata
+
+Optimize Prisma queries.
+
+Prefer createMany for bulk inserts.
+
+Never expose environment variables.
+
+Keep components modular and scalable.
